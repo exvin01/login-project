@@ -112,8 +112,5 @@ app.get('/signup', (req, res) =>{
 app.get('/login', (req, res) =>{
     res.sendFile(path.join(__dirname, 'login.html'));
 });
-app.get('/style', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'style.css'));
-                 });
 
 module.exports = app;
