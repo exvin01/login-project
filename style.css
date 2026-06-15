@@ -24,7 +24,7 @@ form{
     border: 3px solid #79a546;
     display: grid;
     padding: 50px;
-    font-size: 1.5em;
+    height: auto;
 }
 input{
   width: 100%;
@@ -39,7 +39,7 @@ input{
  }
 
 button{
-    font-size: 0.9em;
+    font-size: 1.2em;
     cursor: pointer;
     background-color: #79a546;;
     color: #eee;
