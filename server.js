@@ -40,7 +40,7 @@ app.post('/signup', authLimiter, async (req, res) =>{
             return res.status(400).send('Student number and password required');
         }
         if(stdpass.length < 6) {
-            return res.status(400).send('Password must be at least 6 characters');
+           res.sendFile(path.join(__dirname, 'reject.html'));
         }
 
         const database = await connectDB();
@@ -48,7 +48,7 @@ app.post('/signup', authLimiter, async (req, res) =>{
 
         const userExist = await collection.findOne({stdnumber});
         if(userExist){
-            return res.status(400).send('User already exists. Please login.');
+           res.sendFile(path.join(__dirname, 'reject.html'));
         }
 
         // Hash password before saving
@@ -61,7 +61,7 @@ app.post('/signup', authLimiter, async (req, res) =>{
             ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress
         });
        
-        res.status(201).send('Signup successful ✅ Please go to login page');
+        res.sendFile(path.join(__dirname, 'success.html'));
     } catch (err) {
         console.error(err); 
         res.status(500).send('Error: signup failed');
@@ -84,14 +84,14 @@ app.post('/login', authLimiter, async (req, res) =>{
         const user = await collection.findOne({stdnumber});
         
         if(!user) {
-            return res.status(401).send('Wrong credentials. Please try again.');
+           res.sendFile(path.join(__dirname, 'reject.html'));
         }
 
         // Compare entered password with hash in DB
         const isMatch = await bcrypt.compare(stdpass, user.stdpass);
         
         if(!isMatch) {
-            return res.status(401).send('Wrong credentials. Please try again.');
+            res.sendFile(path.join(__dirname, 'reject.html'));
         } else {
             res.sendFile(path.join(__dirname, 'homepage.html'));
         }
@@ -102,15 +102,12 @@ app.post('/login', authLimiter, async (req, res) =>{
 });
 
 app.get('/', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'index.htm'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/signup', (req, res) =>{
     res.sendFile(path.join(__dirname, 'signup.html'));
 });
 
-app.get('/login', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'login.html'));
-});
 
 module.exports = app;
